@@ -33,7 +33,7 @@
     const { steps, skipped } = parseScenario($('scenario').value);
     const { log, findings } = AgentMemoryCheck.runScenario(steps, Date.now());
     if (skipped.length) findings.unshift({ level: 'warn', code: 'UNPARSED', text: `Line(s) ${skipped.join(', ')} could not be parsed and were skipped.` });
-    if (!findings.length) findings.push({ level: 'ok', code: 'CLEAN', text: 'Scenario ran clean: every expectation matched memory behaviour.' });
+    if (!findings.length) findings.push({ level: 'ok', code: 'CLEAN', text: 'Scenario ran clean: every expectation matched the simulated memory behaviour - a transparent toy scorer, not proof of production behaviour.' });
     $('findings').innerHTML = findings.map((f) =>
       `<li class="${f.level}"><span class="code">${esc(f.code)}</span><br>${esc(f.text)}</li>`).join('');
     $('log').innerHTML = log.map((l) => `<li>${esc(l)}</li>`).join('');
