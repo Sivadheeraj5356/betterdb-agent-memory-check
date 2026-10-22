@@ -51,15 +51,15 @@
         if (step.expectHit === true && !r.hit)
           findings.push({ level: 'error', code: 'EXPECTED_HIT_MISSED', text: `Step ${i + 1}: "${step.query}" should hit memory but missed (best score ${r.score.toFixed(2)}).` });
         if (step.expectHit === false && r.hit)
-          findings.push({ level: 'error', code: 'UNEXPECTED_HIT', text: `Step ${i + 1}: "${step.query}" hit "${r.item.id}" but should have missed (scope or expiry leak).` });
+          findings.push({ level: 'error', code: 'UNEXPECTED_HIT', text: `Step ${i + 1}: "${step.query}" hit "${r.item.id}" but should have missed - possible scope or expiry leak in the simulated memory.` });
         if (step.expectParaphraseHit && !r.hit)
-          findings.push({ level: 'warn', code: 'PARAPHRASE_MISS', text: `Step ${i + 1}: paraphrase "${step.query}" missed - semantic cache would not catch this rephrase.` });
+          findings.push({ level: 'warn', code: 'PARAPHRASE_MISS', text: `Step ${i + 1}: paraphrase "${step.query}" missed in this keyword-overlap simulation - a production semantic cache with embeddings may still catch it.` });
       }
     });
     const stats = { stored: mem.items.length, totalHits: mem.items.reduce((a, m) => a + m.hits, 0) };
     const wantedHit = steps.some((s) => s.query && (s.expectHit || s.expectParaphraseHit));
     if (stats.stored && wantedHit && stats.totalHits === 0)
-      findings.push({ level: 'warn', code: 'NO_HITS_AT_ALL', text: 'Memory stores items but no query ever hits - retrieval threshold or indexing is broken.' });
+      findings.push({ level: 'warn', code: 'NO_HITS_AT_ALL', text: 'Memory stores items but no query ever hits in this simulation - if mirrored in production, the retrieval threshold or indexing may need review.' });
     return { log, findings, stats };
   }
   return { tokenize, keywords, overlapScore, makeMemory, runScenario };
