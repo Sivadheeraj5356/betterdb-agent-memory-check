@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agent Memory Check</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>Agent Memory Check</h1>
+    <p class="sub">QA harness for an agent memory layer before it goes near production: scoped retrieval, TTL expiry, paraphrase robustness and hit/miss observability. Define a scenario of store and query steps, run it, and see exactly where memory lies.</p>
+  </header>
+
+  <section class="card">
+    <label class="lbl" for="scenario">Scenario, one step per line:</label>
+    <textarea id="scenario" rows="10" spellcheck="false">store m1 | default | refund window is 30 days for damaged items
+store m2 | default | vip customers get priority support routing
+store m3 | ops | warehouse cutoff time is 4pm IST | ttl=3600
+query refund window damaged items | expect=hit
+query priority support for vip | expect=hit
+query warehouse cutoff | scope=ops | expect=hit
+query warehouse cutoff | expect=miss
+query completely unrelated weather question | expect=miss</textarea>
+    <p class="hint">Steps: <code>store id | scope | text | ttl=seconds</code> or <code>query text | scope=name | expect=hit|miss</code></p>
+    <button id="run" type="button">Run scenario</button>
+  </section>
+
+  <section id="results" class="hidden">
+    <div class="grid">
+      <div class="card">
+        <h2>Findings</h2>
+        <ul id="findings" class="findings"></ul>
+      </div>
+      <div class="card">
+        <h2>Execution log</h2>
+        <ol id="log" class="log"></ol>
+      </div>
+    </div>
+  </section>
+
+  <footer>Plain HTML, CSS and JavaScript. No external services, build step or secrets. Tests: <code>npm test</code>.</footer>
+</main>
+<script src="memory.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
