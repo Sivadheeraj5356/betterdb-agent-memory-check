@@ -1,0 +1,8 @@
+{
+  "name": "betterdb-agent-memory-check",
+  "version": "1.0.0",
+  "description": "QA harness for agent memory layers: scoped retrieval, TTL expiry, paraphrase robustness and hit/miss observability.",
+  "main": "memory.js",
+  "scripts": { "test": "node --test" },
+  "license": "MIT"
+}
